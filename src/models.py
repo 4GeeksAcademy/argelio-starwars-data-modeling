@@ -26,12 +26,20 @@ class Address(Base):
     person = relationship(Person)
 
 '''
+class User_Favorites(Base):
+    __tablename__ = 'People_Favorites'
+    id = Column(Integer, primary_key = True)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    people_id = Column(Integer, ForeignKey('people.id'))
+    planet_id = Column(Integer, ForeignKey('planet.id'))
+
 class User(Base):
     __tablename__ = 'User'
     id = Column(Integer, primary_key = True)
     name = Column(String(150), nullable=False)
     email = Column(String(150), nullable=False)
     password = Column(String(200), nullable=False)
+    favorite = relationship(User_Favorites)
 
 class People(Base):
     __tablename__ = 'People'
@@ -45,6 +53,7 @@ class People(Base):
     birth_year = Column(String(100))
     gender = Column(String(100))
     homeworld = Column(String(100))
+    favorite = relationship(User_Favorites)
 
 class Planet(Base):
     __tablename__ = 'Planet'
@@ -55,24 +64,9 @@ class Planet(Base):
     diameter = Column(String(100))
     climate = Column(String(100))
     gravity = Column(String(100))
+    favorite = relationship(User_Favorites)
 
-class User_People_Favorites(Base):
-    __tablename__ = 'User_People_Favorites'
-    id = Column(Integer, primary_key = True)
-    user_id = Column(Integer, ForeignKey('user.id'))
-    people_id = Column(Integer, ForeignKey('planet.id'))
-    user = relationship(User)
-    people = relationship(People)
-
-class User_Planet_Favorites(Base):
-    __tablename__ = 'User_Planet_Favorites'
-    id = Column(Integer, primary_key = True)
-    user_id = Column(Integer, ForeignKey('user.id'))
-    planet_id = Column(Integer, ForeignKey('planet.id'))
-    user = relationship(User)
-    planet = relationship(Planet)
-
-    def to_dict(self):
+def to_dict(self):
         return {}
 
 ## Draw from SQLAlchemy base
